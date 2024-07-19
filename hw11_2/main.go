@@ -4,12 +4,12 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"regexp"
 	"strings"
 	"unicode"
 )
 
 func main() {
-    // Відкриваємо файл
     file, err := os.Open("1689007676028_text.txt")
     if err != nil {
         fmt.Println("Помилка відкриття файлу:", err)
@@ -17,27 +17,33 @@ func main() {
     }
     defer file.Close()
 
-    // Створюємо сканер для читання файлу
     scanner := bufio.NewScanner(file)
+    // scanner.Split(bufio.ScanLines)
+
+    vowelConsonantRegex := regexp.MustCompile(`(\s|^)[аеєиіїоуюяАЕЄИІЇОУЮЯ][аеєиіїоуюябвгґджзйклмнпрстфхцчшщьАЕЄИІЇОУЮЯБВГҐДЖЗЙКЛМНПРСТФХЦЧШЩЬ]*[бвгґджзйклмнпрстфхцчшщБВГҐДЖЗЙКЛМНПРСТФХЦЧШЩ](\s|[,])`)
+    // repeatedLetterRegex := regexp.MustCompile(`(?i)\b([а-яґєії]).(?:[а-яґєії']*\1)\b`)
 
     vowelConsonantWords := make(map[string]bool)
     repeatedLetterWords := make(map[string]bool)
 
-    // Читаємо файл рядок за рядком
     for scanner.Scan() {
-        words := strings.Fields(scanner.Text())
+        line := scanner.Text()
+
+        vcMatches := vowelConsonantRegex.FindAllString(line, -1)
+        for _, word := range vcMatches {
+            vowelConsonantWords[strings.ToLower(word)] = true
+        }
+
+
+		words := strings.Fields(scanner.Text())
         for _, word := range words {
             cleanWord := strings.Trim(word, ".,!?()\"':;")
-            if startsWithVowelEndsWithConsonant(cleanWord) {
-                vowelConsonantWords[strings.ToLower(cleanWord)] = true
-            }
             if hasRepeatedLetters(cleanWord) {
                 repeatedLetterWords[cleanWord] = true
             }
         }
     }
 
-    // Перевіряємо помилки сканування
     if err := scanner.Err(); err != nil {
         fmt.Println("Помилка читання файлу:", err)
     }
@@ -51,36 +57,7 @@ func main() {
     for word := range repeatedLetterWords {
         fmt.Println(word)
     }
-}
-
-func startsWithVowelEndsWithConsonant(word string) bool {
-    if len(word) < 2 {
-        return false
-    }
-    runes := []rune(word)
-    firstLetter := unicode.ToLower(runes[0])
-    lastLetter := unicode.ToLower(runes[len(runes)-1])
-    
-    vowels := []rune{'а', 'е', 'є', 'и', 'і', 'ї', 'о', 'у', 'ю', 'я'}
-    consonants := []rune{'б', 'в', 'г', 'ґ', 'д', 'ж', 'з', 'й', 'к', 'л', 'м', 'н', 'п', 'р', 'с', 'т', 'ф', 'х', 'ц', 'ч', 'ш', 'щ'}
-
-    startsWithVowel := false
-    for _, vowel := range vowels {
-        if firstLetter == vowel {
-            startsWithVowel = true
-            break
-        }
-    }
-
-    endsWithConsonant := false
-    for _, consonant := range consonants {
-        if lastLetter == consonant {
-            endsWithConsonant = true
-            break
-        }
-    }
-
-    return startsWithVowel && endsWithConsonant
+	
 }
 
 func hasRepeatedLetters(word string) bool {
