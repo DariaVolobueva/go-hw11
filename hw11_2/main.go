@@ -18,10 +18,8 @@ func main() {
     defer file.Close()
 
     scanner := bufio.NewScanner(file)
-    // scanner.Split(bufio.ScanLines)
 
-    vowelConsonantRegex := regexp.MustCompile(`(\s|^)[аеєиіїоуюяАЕЄИІЇОУЮЯ][аеєиіїоуюябвгґджзйклмнпрстфхцчшщьАЕЄИІЇОУЮЯБВГҐДЖЗЙКЛМНПРСТФХЦЧШЩЬ]*[бвгґджзйклмнпрстфхцчшщБВГҐДЖЗЙКЛМНПРСТФХЦЧШЩ](\s|[,])`)
-    // repeatedLetterRegex := regexp.MustCompile(`(?i)\b([а-яґєії]).(?:[а-яґєії']*\1)\b`)
+    vowelConsonantRegex := regexp.MustCompile(`(\s|^)[аеєиіїоуюяАЕЄИІЇОУЮЯ][аеєиіїоуюябвгґджзйклмнпрстфхцчшщьАЕЄИІЇОУЮЯБВГҐДЖЗЙКЛМНПРСТФХЦЧШЩЬ]*[бвгґджзйклмнпрстфхцчшщБВГҐДЖЗЙКЛМНПРСТФХЦЧШЩ](\s|[,]|[.])`)
 
     vowelConsonantWords := make(map[string]bool)
     repeatedLetterWords := make(map[string]bool)
