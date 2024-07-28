@@ -19,7 +19,7 @@ func main() {
 
     scanner := bufio.NewScanner(file)
 
-    vowelConsonantRegex := regexp.MustCompile(`(\s|^)[аеєиіїоуюяАЕЄИІЇОУЮЯ][аеєиіїоуюябвгґджзйклмнпрстфхцчшщьАЕЄИІЇОУЮЯБВГҐДЖЗЙКЛМНПРСТФХЦЧШЩЬ]*[бвгґджзйклмнпрстфхцчшщБВГҐДЖЗЙКЛМНПРСТФХЦЧШЩ](\s|[,]|[.])`)
+    vowelConsonantRegex := regexp.MustCompile(`(\s|^)[аеєиіїоуюяАЕЄИІЇОУЮЯ][аеєиіїоуюябвгґджзйклмнпрстфхцчшщьАЕЄИІЇОУЮЯБВГҐДЖЗЙКЛМНПРСТФХЦЧШЩЬ]*[бвгґджзйклмнпрстфхцчшщБВГҐДЖЗЙКЛМНПРСТФХЦЧШЩ][\s,.]`)
 
     vowelConsonantWords := make(map[string]bool)
     repeatedLetterWords := make(map[string]bool)
